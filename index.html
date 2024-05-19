@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Fetch Example</title>
+</head>
+<body>
+    <h1>Fetch Data Through Cors.lol Proxy</h1>
+    <button id="fetchButton">Fetch Data</button>
+
+    <script>
+        // Function to construct the full proxy URL with an encoded target URL
+        function constructProxyUrl(targetUrl) {
+            const encodedUrl = encodeURIComponent(targetUrl);
+            const proxyUrl = `https://api.cors.lol/?url=${encodedUrl}`;
+            return proxyUrl;
+        }
+
+        // Function to make a fetch request to the proxy
+        async function fetchDataThroughProxy(proxyUrl) {
+            try {
+                const response = await fetch(proxyUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                console.log('Response:', response);
+                response.clone().text().then(text => console.log('Response Body Text:', text));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            const targetUrl = 'http://example.com/api/data';
+            const proxyRequestUrl = constructProxyUrl(targetUrl);
+            
+            fetchDataThroughProxy(proxyRequestUrl);
+        });
+    </script>
+</body>
+</html>
